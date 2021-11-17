@@ -4,3 +4,6 @@
 # python manage.py tailwind start
 # activar antes nuestro ambiente virtual
 # (para ver inst y config tailwind ver https://django-tailwind.readthedocs.io/en/latest/installation.html)
+
+# para instalar paquetes del project
+# pip install -r requeriments.txt
