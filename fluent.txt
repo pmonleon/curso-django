@@ -1,0 +1,79 @@
+// configurandolo
+
+>>> from fluent.runtime import FluentBundle, FluentResource
+
+>>> bundle = FluentBundle(["en-US"])
+
+// se deberia hacer desde el .ftl archivo
+>>> resource = FluentResource("""
+... welcome = Welcome to this great app!
+... greet-by-name = Hello, { $name }!
+... """)
+>>> bundle.add_resource(resource)
+
+
+// generando tarducciones
+
+>>> welcome = bundle.get_message('welcome')
+>>> translated, errs = bundle.format_pattern(welcome.value)
+>>> translated
+"Welcome to this great app!"
+>>> errs
+[]
+
+>>> greet = bundle.get_message('greet-by-name')
+>>> translated, errs = bundle.format_pattern(greet.value, {'name': 'Jane'})
+>>> translated
+'Hello, \u2068Jane\u2069!'
+
+>>> translated, errs = bundle.format_pattern(greet.value, {})
+>>> translated
+'Hello, \u2068{$name}\u2069!'
+>>> errs
+[FluentReferenceError('Unknown external: name')]
+
+*************************************************************
+// usando la subclase
+
+>>> l10n = DemoLocalization("key = A localization")
+>>> pl = DemoLocalization("key = A localization", locale="pl")
+
+NUMBERS function
+>>> l10n = DemoLocalization(
+... "show-total-points = You have { $points } points."
+... )
+>>> val = l10n.format_value("show-total-points", {'points': 1234567})
+>>> val
+'You have 1,234,567 points.'
+
+then
+>>> from fluent.runtime.types import fluent_number
+>>> points = fluent_number(1234567, useGrouping=False)
+>>> l10n.format_value("show-total-points", {'points': 1234567})
+'You have 1234567 points.'
+
+>>> amount = fluent_number(1234.56, style="currency", currency="USD")
+>>> l10n = DemoLocalization(
+... "your-balance = Your balance is { $amount }"
+... )
+>>> l10n.format_value(balance.value, {'amount': amount})
+'Your balance is $1,234.56'
+
+
+
+*************************************************************
+// sin usar la subclase
+>>> from fluent.runtime import FluentLocalization, FluentResourceLoader
+
+// para cargar los .flt archivos
+>>> loader = FluentResourceLoader("l10n/{locale}")
+
+//El principal punto de entrada para su aplicación es un FluentLocalization. Pasas una lista de configuraciones regionales al constructor, la primera es la configuración regional deseada, con alternativas después de eso, así como los ID de recursos y tu cargador.
+>>> l10n = FluentLocalization(["es", "en"], ["main.ftl"], loader)
+>>> val = l10n.format_value("my-first-string")
+"Fluent can be easy"
+
+
+
+
+
