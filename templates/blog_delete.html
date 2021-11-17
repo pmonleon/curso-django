@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h3>Estas seguro ?</h3>
+<form method='POST'>
+    {% csrf_token %}
+    {{form}}
+    <button class="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type='submit'>Eliminar</button>
+</form>
+<hr>
+<button class="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type='text'>
+    <a href="{% url 'blog:home' %}">Volver</a>
+</button>
+{% endblock content %}
