@@ -1,4 +1,4 @@
-from fluent.runtime import FluentLocalization, FluentResource
+from fluent.runtime import FluentLocalization, FluentResource, FluentResourceLoader
 
 class DemoLocalization(FluentLocalization):
   def __init__(self, fluent_content, locale='en', functions=None):
@@ -11,6 +11,11 @@ class DemoLocalization(FluentLocalization):
     bundle = self._create_bundle(self.locales)
     bundle.add_resource(self.resource)
     yield bundle
-
-
+    
   
+  
+
+    
+
+
+
