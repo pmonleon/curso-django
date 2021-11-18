@@ -1,16 +1,12 @@
 from threading import Lock, Thread
-from fluent.runtime import  FluentLocalization, FluentResource
+from fluent.runtime import FluentLocalization, FluentResource
 
 
 class FluentMeta(type):
     """
     This is a thread-safe implementation of FluentService Singleton.
     """
-    _fluent_resource_loader = FluentResource('l10n/{locale}')
-    _localization = {
-        "es": FluentLocalization(["es", "en"], ["main.flt"], _fluent_resource_loader),
-        "en": FluentLocalization(["en", "es"], ["main.flt"], _fluent_resource_loader)
-    }
+
     _instances = {}
     _lock: Lock = Lock()
     """
@@ -42,31 +38,29 @@ class FluentMeta(type):
 
 
 class FluentService(metaclass=FluentMeta):
-    value: str = None
 
-    def __init__(self, value: str) -> None:
-        self.value = value
+    def __init__(self) -> None:
+        self._fluent_resource_loader = FluentResource('/l10n/{locale}')
+        print("fluent resource loader", self._fluent_resource_loader)
+        self._localization = {
+            "es": FluentLocalization(["es", "en"], ["main.flt"], self._fluent_resource_loader),
+            "en": FluentLocalization(["en"], ["main.flt"], self._fluent_resource_loader)
+        }
+        # print("localisation", self._localization)
 
-    def get_text(self):
-        """
-        Here we'll get the messages
-        """
+    def get_l10n(self, locale) -> FluentLocalization:
+        print("localization llamada", self._localization[locale])
+        return self._localization[locale]
 
 
-def test_singleton(value: str) -> None:
-    singleton = FluentService(value)
-    print(singleton.value)
+def test_singleton() -> None:
+    singleton = FluentService()
+    l10n = singleton.get_l10n("es")
+    print("formatted welcome value", l10n.format_value("welcome"))
 
 
 if __name__ == "__main__":
-    # The client code.
-
-    print("If you see the same value, then singleton was reused (yay!)\n"
-          "If you see different values, "
-          "then 2 singletons were created (bad!!)\n\n"
-          "RESULT:\n")
-
-    process1 = Thread(target=test_singleton, args=("FOO",))
-    process2 = Thread(target=test_singleton, args=("BAR",))
+    process1 = Thread(target=test_singleton)
+    process2 = Thread(target=test_singleton)
     process1.start()
     process2.start()
