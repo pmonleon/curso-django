@@ -22,7 +22,7 @@ def posts_counter():
 
 @register.simple_tag
 def fname():
-    return translation('lista', ['es', 'en'])
+    return translation('lista')
     # loader = FluentResourceLoader(os.path.join(BASE_DIR,"blog/l10n/{locale}"))
     # print(loader)
     # l10n = FluentLocalization(["es", "en"], ["main.ftl"], loader)
@@ -31,7 +31,7 @@ def fname():
     # print('trial', val)
     # return val
 
-print('yeeeeeeeeee', translation('lista', ['es', 'en']))
+print('yeeeeeeeeee', translation('lista'))
 
 
 

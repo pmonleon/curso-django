@@ -1,1 +1,0 @@
-welcome = Hola, visita mi blog aqui

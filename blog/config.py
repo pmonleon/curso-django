@@ -1,15 +1,16 @@
 from fluent.runtime import FluentLocalization, FluentResourceLoader
 from pathlib import Path
 import os
+from fluent_octopus.fluent_service import FluentService
+from django.utils.translation import get_language
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-def translation(arg,lista):
-    loader = FluentResourceLoader(os.path.join(BASE_DIR,"blog/l10n/{locale}"))
-    l10n = FluentLocalization(lista, ["main.ftl"], loader)
-    val = l10n.format_value(arg)
+
+def translation(arg):
+    print("calling translation with ", arg)
+    trans_service = FluentService()
+    val = trans_service.get_l10n(get_language()).format_value(arg)
     print('ewfwrwewetwets', val)
     return val
 
 
-print(os.path.join(BASE_DIR,'blog'))
-print(translation('welcome', ['es']))
+print(translation('welcome'))
