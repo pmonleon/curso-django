@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 
+{% load custom_tags %}
+
 {% block content %}
-<h1>Formulario Editar</h1>
+<h1>{% fname "editar_form" "" "" %}</h1>
 <hr>
 <form method='POST'>
     {% csrf_token %}
@@ -13,10 +15,10 @@
     <br>
     {{form.content}}
     <br>
-    <button class="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type='submit'>Actualizar</button>
+    <button class="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type='submit'>{% fname "actualiza" "" "" %} </button>
 
     <button class="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type='text'> 
-        <a href="{% url 'blog:home' %}">Volver</a>
+        <a href="{% url 'blog:home' %}"> {% fname "volver" "" "" %} </a>
     </button>
 </form>
 

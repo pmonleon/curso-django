@@ -21,8 +21,11 @@ def posts_counter():
     return Post.objects.count()
 
 @register.simple_tag
-def fname():
-    return translation('lista', ['es', 'en'])
+def fname(trans_string, arg1, arg2):
+    if arg1 == "" and arg2 == "":
+        return translation(trans_string, "", "")
+    else:
+        return translation(trans_string, arg1, arg2)
     # loader = FluentResourceLoader(os.path.join(BASE_DIR,"blog/l10n/{locale}"))
     # print(loader)
     # l10n = FluentLocalization(["es", "en"], ["main.ftl"], loader)
@@ -31,7 +34,7 @@ def fname():
     # print('trial', val)
     # return val
 
-print('yeeeeeeeeee', translation('lista', ['es', 'en']))
+
 
 
 

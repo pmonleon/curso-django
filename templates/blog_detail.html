@@ -1,18 +1,20 @@
 {% extends 'base.html' %}
 
+{% load custom_tags %}
+
 {% block content %}
-<h1 class='text-2xl font-bold'> Detalle del post <h1>
+<h1 class='text-2xl font-bold'> {% fname "detalle_post" "" "" %} <h1>
 <hr>
 <h3 class='text-xl'>
-    Titulo : <p class='text-lg text-base font-light leading-relaxed mt-0 mb-4 text-pink-800'>{{post.title}}</p>
+    {% fname "titulo" "" ""%} <p class='text-lg text-base font-light leading-relaxed mt-0 mb-4 text-pink-800'>{{post.title}}</p>
 </h3>
 <br>
 <h3 class='text-xl'>
-    Contenido : <p class='text-lg text-base font-light leading-relaxed mt-0 mb-4 text-pink-800'>{{post.content}}</p>
+    {% fname "contenido" "" "" %} <p class='text-lg text-base font-light leading-relaxed mt-0 mb-4 text-pink-800'>{{post.content}}</p>
 </h3>
 <hr>
 <br>
 <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type='text'> 
-    <a href="{% url 'blog:home' %}">Volver</a>
+    <a href="{% url 'blog:home' %}">{% fname "volver" "" "" %}</a>
 </button>
 {% endblock content %}

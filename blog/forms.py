@@ -2,6 +2,8 @@ from django import forms
 from django.forms.widgets import TextInput, Textarea
 from .models import Post
 
+from blog.config import translation
+
 class PostCreateForm(forms.ModelForm):
     """docstring for PostCreateForm."""
     class Meta:
@@ -12,8 +14,8 @@ class PostCreateForm(forms.ModelForm):
             "content" : Textarea(attrs={"placeholder" : "añade un comentario"})
         }
         labels = {
-            "title": "Titulo",
-            "content": "Contenido"
+            "title": translation("create_titulo", "", ""),
+            "content": translation("create_contenido", "", ""),
         }
 
         

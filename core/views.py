@@ -10,5 +10,5 @@ class HomeView(View):
         context = {
             
         }
-        print('ddgdgasgdjhgagdkadwj', get_language())
+        print('home view', get_language())
         return render(request, 'index.html', context)
