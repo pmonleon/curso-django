@@ -2,20 +2,13 @@ from fluent.runtime import FluentLocalization, FluentResourceLoader
 from pathlib import Path
 import os
 from django.utils.translation import get_language
-from django.conf import settings
-from django.http import HttpResponse
-from django.utils import translation as transla
+f
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 def translation(arg, arg1, arg2):
     print(arg)
     loader = FluentResourceLoader(os.path.join(BASE_DIR,"blog/l10n/{locale}"))
-    lang_list = []  
 
-    user_language = get_language()
-    transla.activate('en')
-    response = HttpResponse(...)
-    response.set_cookie(settings.LANGUAGE_COOKIE_NAME, user_language)  
     if get_language() == 'es':
         lang_list = ['es', 'en']
         pass
@@ -28,5 +21,18 @@ def translation(arg, arg1, arg2):
     val = l10n.format_value(arg, {arg1 : arg2})
     print(val)
     return val
+
+
+from fluent_octopus.fluent_service import FluentService
+from django.utils.translation import get_language
+
+
+# def translation(arg):
+#     print("calling translation with ", arg)
+#     trans_service = FluentService()
+#     val = trans_service.get_l10n(get_language()).format_value(arg)
+#     print('ewfwrwewetwets', val)
+#     return val
+
 
 
