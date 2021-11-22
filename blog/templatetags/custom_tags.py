@@ -6,7 +6,8 @@
 from django import template
 from blog.models import Post
 from fluent.runtime import FluentLocalization, FluentResourceLoader
-from blog.config import translation
+# from blog.config import translation
+from fluent_octopus.fluent_service import translation
 import html2text
 from pathlib import Path
 

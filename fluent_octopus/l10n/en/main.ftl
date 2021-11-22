@@ -1,4 +1,5 @@
-welcome = Hi, visit my blog here
+welcome = Hi, visit my blog
+link = here
 blog = My first python's blog
 lista = My post list
 titulo = Title
@@ -23,3 +24,5 @@ add_comment = add a new comment
 ### Fluent resource comment
 editar_form = Edit Form
 crear_form = Create Form
+placeholder_titulo = add a title
+placeholder_content = add a content

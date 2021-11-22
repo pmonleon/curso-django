@@ -1,4 +1,5 @@
-welcome = Hola, visita mi blog aqui
+welcome = Hola, visita mi blog
+link = aqui
 lista = Listado de post
 trial = mensaje de prueba
 blog = Mi primer blog en python
@@ -27,3 +28,5 @@ crear_form = Formulario Crear
 prueba = probando editar placeholder
 place = 
     .placeholder = probando editar placeholder
+placeholder_titulo = añade un titulo
+placeholder_content = añade un comentario

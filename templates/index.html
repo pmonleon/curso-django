@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 {% load i18n %}
+{% load custom_tags %}
 {% block content %}
 <h1>
-    Hola, visita mi blog 
-    <a class="text-blue-500" href="{% url 'blog:home' %}"> aqui </a>
+    {% fname "welcome" "" "" %}
+    <a class="text-blue-500" href="{% url 'blog:home' %}"> {% fname "link" "" "" %} </a>
 </h1>
 <form action="{% url 'set_language' %}" method="post">{% csrf_token %}
     <input name="next" type="hidden" value="{{ redirect_to }}" />

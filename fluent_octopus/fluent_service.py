@@ -50,11 +50,11 @@ def test_singleton() -> None:
     print("formatted welcome value", l10n.format_value("welcome"))
 
 
-def translation(arg):
+def translation(arg, arg1, arg2):
+    print("calling translation with a ", arg, arg1, arg2, get_language())
     trans_service = FluentService()
-    val = trans_service.get_l10n(get_language()).format_value(arg)
+    val = trans_service.get_l10n(get_language()).format_value(arg, {arg1 : arg2})
     return val
-
 
 if __name__ == "__main__":
     process1 = Thread(target=test_singleton)
