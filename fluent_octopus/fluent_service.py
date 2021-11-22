@@ -53,8 +53,6 @@ def test_singleton() -> None:
 def translation(arg):
     trans_service = FluentService()
     val = trans_service.get_l10n(get_language()).format_value(arg)
-    print('ewfwrwewetwets', val)
-    print(translation('welcome'))
     return val
 
 

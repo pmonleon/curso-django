@@ -12,8 +12,15 @@ volver = back
 enviar = send
 actualiza = update
 contenido = Content
+
 create_titulo = Title
 create_contenido = Content
+crear-label = {$label ->
+    [titulo] Title
+    *[contenido] Content
+}
+
+
 add_title = add new a title
 add_comment = add a new comment
 ### Fluent resource comment

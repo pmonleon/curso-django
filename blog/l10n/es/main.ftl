@@ -13,8 +13,14 @@ volver = volver
 enviar = enviar
 actualiza = actualiza
 contenido = Contenido
+
 create_titulo = Titulo
 create_contenido = Contenido
+crear-label = {$label ->
+    [titulo] Titulo
+    *[contenido] Contenido
+}
+
 add_title = titulo...
 add_comment = comentario...
 ### Fluent resource comment

@@ -7,11 +7,13 @@
 <hr>
 <form method='POST'>
     {% csrf_token %}
-    {{form.title.label_tag}} 
+    {% fname "crear-label" "label" form.title.label_tag %}
+ 
     <br>
     {{form.title}}
     <br>
-    {{form.content.label_tag}} 
+    {% fname "crear-label" "label" form.content.label_tag %}
+    
     <br>
     {{form.content}}
     <br>
