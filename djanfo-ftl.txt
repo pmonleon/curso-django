@@ -1,0 +1,201 @@
+// activacion del lenguaje 
+
+from django_ftl import activate
+
+activate("en-US")
+o 
+activate("en-US, en, fr")
+
+
+Tan pronto como active un idioma, todos los Bundleobjetos cambiarán para usar ese idioma, solo para el hilo actual. 
+(Antes de activar, usarán su LANGUAGE_CODE configuración como predeterminada si require_activate=False, 
+y esto también se usa como respaldo en el caso de que falten archivos o mensajes FTL).
+
+activate tiene estado, lo que significa que es esencialmente una variable global que se conserva entre solicitudes. 
+Esto introduce la posibilidad de que la solicitud de un usuario cambie el comportamiento de las solicitudes 
+posteriores realizadas por un usuario completamente diferente. 
+La mejor forma de evitar estos problemas es utilizar django_ftl.override() en su lugar:
+
+from django_ftl import override
+
+with override("en-US"):
+    pass  # Code that uses this language
+
+Alternativamente, asegúrese de que django_ftl.deactivate() se llame al final de una solicitud.
+
+// usando middleware
+
+MIDDLEWARE = [
+      ...
+      "django.middleware.locale.LocaleMiddleware",
+      "django_ftl.middleware.activate_from_request_language_code"
+      ...
+]
+
+Este es un middleware muy simple que simplemente mira request.LANGUAGE_CODE 
+(que ha sido configurado por django.middleware.locale.LocaleMiddleware) y activa ese lenguaje para django-ftl.
+
+En lugar de estos dos, también puede usar "django_ftl.middleware.activate_from_request_session"
+agregándolo a su MIDDLEWARE(en algún lugar después del middleware de sesión). 
+Este middleware busca un idioma configurado request.session, 
+según lo establecido por la set_languagevista que proporciona Django (consulte los documentos de set_language ), 
+y usa este valor, recurriendo a settings.LANGUAGE_CODEél si no lo encuentra. 
+También se establece request.LANGUAGE_CODE en el mismo valor, similar a cómo se 
+django.middleware.locale.LocaleMiddlewarecomporta.
+
+// usando en python
+from myapp.ftl_bundles import main as ftl_bundle
+ftl_bundle.format('events-title')
+'MyApp Events!'
+
+ftl_bundle.format('events-greeting', {'username': 'boaty mcboatface'})
+'Hello, \u2068boaty mcboatface\u2069
+
+
+
+// traduccion perezosa
+Por ejemplo, los atributos verbose_name y help_text de un campo de modelo se pueden hacer de esta manera:
+
+from django.db import models
+from myapp.ftl_bundles import main as ftl_bundle
+
+class Kitten(models.Model):
+    name = models.CharField(
+        ftl_bundle.format_lazy('kitten-name'),
+        help_text=ftl_bundle.format_lazy('kitten-name.help-text'))
+# kittens.ftl
+
+kitten-name = name
+    .help-text = Use most recent name if there have been are multiple.
+
+
+
+// usando django templates
+Para usar etiquetas de plantilla django-ftl en un proyecto, django_ftldebe agregarse a su INSTALLED_APPScomo esto:
+
+INSTALLED_APPS = (
+    ...
+    'django_ftl.apps.DjangoFtlConfig',
+    ...
+)
+
+Colóquelo en la parte superior de su plantilla para cargar la biblioteca de etiquetas de la plantilla. 
+Proporciona 3 etiquetas de plantilla, al menos una de las cuales necesitará:{% load ftl %}
+
+ftlconf¶
+Se utiliza para establecer la configuración que necesita ftlmsg, es decir, la bundleque se utilizará. 
+Debe usarse una vez cerca de la parte superior de una plantilla (antes de que se necesiten traducciones) y 
+debe usarse en la situación en la que la mayoría de la plantilla usará el mismo paquete. 
+Para establecer la configuración para solo una parte de una plantilla, use withftl.
+
+El bundle argumento es un objeto de paquete (pasado a través del contexto de la plantilla) 
+o una cadena que es una ruta de puntos a un paquete.
+
+Ejemplo:
+
+{% load ftl %}
+{% ftlconf bundle='myapp.ftl_bundles.main' %}
+
+Ejemplo en el que pasamos el objeto del paquete desde la vista:
+
+# myapp.views
+
+from myapp.ftl_bundles import main as main_bundle
+
+def my_view(request):
+    # ...
+    return render(request, 'myapp/mypage.html',
+                  {'ftl_bundle': main_bundle})
+{# myapp/events.html #}
+
+{% load ftl %}
+{% ftlconf bundle=ftl_bundle %}
+
+withftl¶
+withftles similar a ftlconfen que su propósito es establecer datos de configuración para generar mensajes. 
+Se diferencia en que:
+
+Establece los datos solo para los nodos de plantilla contenidos, hasta un endwithftlnodo de cierre , 
+que es necesario.
+
+También toma un languageparámetro que se puede usar para anular el idioma, además de los parámetros bundley
+mode que ftlconftoman. Debe ser una cadena en formato BCP 47.
+
+Se withftlpueden usar múltiples etiquetas anidadas , y se pueden anidar en una plantilla que tiene ftlconfen 
+la parte superior, y su alcance se limitará a los nodos de plantilla contenidos como es de esperar.
+
+Ejemplo:
+
+{% load ftl %}
+
+{% withftl bundle='myapp.ftl_bundles.main' %}
+   {% ftlmsg 'events-title' %}
+{% endwithftl %}
+
+{% withftl bundle='myapp.ftl_bundles.other' language='fr' %}
+   {% ftlmsg 'other-message' %}
+{% endwithftl %}
+Al igual que con ftlconf, los parámetros no tienen que ser solo cadenas literales, 
+pueden hacer referencia a valores en el contexto como lo hacen la mayoría de las etiquetas de plantilla.
+Debe proporcionar uno o más de mode, bundle o language
+
+ftlmsg¶
+Finalmente, para representar realmente un mensaje, debe usar ftlmsg. Se necesita un parámetro obligatorio, 
+el ID del mensaje y cualquier número de argumentos de palabras clave, 
+que corresponden a los parámetros que pasaría en el diccionario de argumentos al llamar format()en código Python.
+
+Ejemplo:
+
+{% load ftl %}
+{% ftlconf bundle='myapp.ftl_bundles.main' %}
+
+<body>
+   <h1>{% ftlmsg 'events-title' %}</h1>
+
+   <p>{% ftlmsg 'events-greeting' username=request.user.username %}</p>
+</body>
+
+Configuración alternativa¶
+En algunos casos, el uso de ftlconf o withftlen las plantillas puede ser tedioso y es posible 
+que desee especificar la configuración del modo / paquete utilizando un método más global.
+
+Una alternativa es establecer algunas variables de configuración en el contexto de la plantilla. 
+Puede hacer esto usando algún método manual o usando un procesador de contexto. 
+Las variables que necesita establecer vienen dadas por las siguientes constantes:
+
+django_ftl.templatetags.ftl.MODE_VAR_NAME para el modo.
+
+django_ftl.templatetags.ftl.BUNDLE_VAR_NAME para el paquete.
+
+Por ejemplo, el siguiente es un procesador de contexto que devolverá la configuración requerida 
+para la ftlmsg etiqueta de plantilla.
+
+import django_ftl.templatetags.ftl
+
+from my_app.ftl_bundles import main
+
+def ftl(request):
+    return {
+        django_ftl.templatetags.ftl.MODE_VAR_NAME: 'server',
+        django_ftl.templatetags.ftl.BUNDLE_VAR_NAME: main,
+    }
+
+
+// HTML 
+Si necesita incluir fragmentos de HTML en los mensajes
+django-ftl se conecta al fluent_compiler
+mecanismo de escape de to y proporciona un escape listo para usar que le permite manejar HTML 
+incrustado en sus mensajes. Para usarlo, asigne el sufijo a sus ID de mensaje -html. Por ejemplo:
+
+welcome-message-html = Welcome { $name }, you look <i>wonderful</i> today.
+
+<html lang="{{ request.LANGUAGE_CODE }}">
+
+Configuración de la preferencia de idioma del usuario¶
+La forma en que desee configurar y almacenar la preferencia de idioma del usuario dependerá de su aplicación. 
+Por ejemplo, puede configurarlo en una cookie, en la sesión o almacenarlo como una preferencia del usuario.
+
+Django tiene una set_language vista incorporada que puede usar con django-ftl; consulte los documentos de set_language .
+(Está diseñado para funcionar con la solución i18n incorporada de Django, pero funciona igual de bien con django-ftl).
+Guarda la preferencia de idioma de un usuario en la sesión (o una cookie si no está usando sesiones), 
+que luego puede usar más tarde en un middleware o vista, por ejemplo.
