@@ -1,4 +1,4 @@
-welcome = Hola, visita mi blog
+welcome = Hola, visita mi blog 
 link = aqui
 lista = Listado de post
 trial = mensaje de prueba
@@ -22,6 +22,10 @@ crear-label = {$label ->
 }
 add_title = titulo...
 add_comment = comentario...
+activity-title = {$leng ->
+    [en] title...
+    *[es] titulo...
+}
 ### Fluent resource comment
 editar_form = Formulario Editar
 crear_form = Formulario Crear

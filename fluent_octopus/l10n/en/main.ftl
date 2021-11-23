@@ -19,6 +19,10 @@ crear-label = {$label ->
     [titulo] Title
     *[contenido] Content
 }
+activity-title = {$leng ->
+    *[en] title...
+    [es] titulo...
+}
 add_title = add new a title
 add_comment = add a new comment
 ### Fluent resource comment
