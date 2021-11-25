@@ -7,3 +7,7 @@
 
 # para instalar paquetes del project
 # pip install -r requeriments.txt
+
+# pyinotify == 0.9.6 para dev no se puede instalar en el mac
+# usar la consola:
+python manage.py shell

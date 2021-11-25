@@ -20,6 +20,8 @@ crear-label = {$label ->
     *[contenido] Content
 }
 
+place = title
+    .placeholder = placeholder title
 
 add_title = add new a title
 add_comment = add a new comment

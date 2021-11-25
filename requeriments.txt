@@ -6,3 +6,5 @@ fluent.syntax == 0.18.1
 fluent.pygments == 1.0
 html2text == 2020.1.16
 django-ftl == 0.13
+fluent-compiler == 0.3
+

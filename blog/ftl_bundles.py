@@ -1,8 +1,11 @@
 from django_ftl.bundles import Bundle
-from django_ftl import activate
+# sfrom django_ftl import override
+
+
+# with override("es"):
+#     pass  # Code that uses this language
 
 
 
 main = Bundle(['blog/main.ftl'])
 
-activate("es")

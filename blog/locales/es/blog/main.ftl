@@ -21,6 +21,9 @@ crear-label = {$label ->
     *[contenido] Contenido
 }
 
+place = titulo
+    .placeholder = placeholder titulo
+
 add_title = titulo...
 add_comment = comentario...
 ### Fluent resource comment
